@@ -1,0 +1,3 @@
+-- CREATE DATABASE IF NOT EXISTS
+CREATE DATABASE IF NOT EXISTS `quick-forms`;
+USE `quick-forms`;

@@ -1,0 +1,15 @@
+services:
+
+  db:
+    image: mysql:8.0
+    restart: always
+    container_name: quick-forms
+    environment:
+      MYSQL_ROOT_PASSWORD: jere1234
+      MYSQL_USER: jere
+      MYSQL_PASSWORD: jere1234
+      MYSQL_DATABASE: quick-forms
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - 3306:3306
