@@ -1,24 +1,19 @@
-import { DataSource } from 'typeorm';
-import { ConfigService } from '@nestjs/config';
+import { DataSource, DataSourceOptions } from 'typeorm';
+import { ConfigService, ConfigModule } from '@nestjs/config';
 
-export const databaseProviders = [
-  {
-    provide: 'DATA_SOURCE',
-    inject: [ConfigService],
-    useFactory: async (configService: ConfigService) => {
-      const dataSource = new DataSource({
-        type: 'mysql',
-        host: configService.getOrThrow('MYSQL_HOST'),
-        port: configService.getOrThrow('MYSQL_PORT'),
-        username: configService.getOrThrow('MYSQL_USER'),
-        password: configService.getOrThrow('MYSQL_PASSWORD'),
-        database: configService.getOrThrow('MYSQL_DATABASE'),
-        entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-        migrations: [__dirname + 'dist/database/migrations/*.js'],
-        synchronize: true,
-      });
+ConfigModule.forRoot();
+const configService = new ConfigService();
 
-      return dataSource.initialize();
-    },
-  },
-];
+export const dataSourceConfig: DataSourceOptions = {
+  type: 'mysql',
+  host: configService.getOrThrow('MYSQL_HOST'),
+  port: configService.getOrThrow('MYSQL_PORT'),
+  username: configService.getOrThrow('MYSQL_USER'),
+  password: configService.getOrThrow('MYSQL_PASSWORD'),
+  database: configService.getOrThrow('MYSQL_DATABASE'),
+  entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+  migrations: [__dirname + '/database/migrations/*.js'],
+  synchronize: true,
+};
+
+export const dataSource = new DataSource(dataSourceConfig);
